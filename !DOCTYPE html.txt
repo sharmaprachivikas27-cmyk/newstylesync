@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AC Bridge Educational Video</title>
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #061c33;
+  color: #12304a;
+}
+
+.toolbar {
+  padding: 15px;
+  text-align: center;
+  background: #062b50;
+}
+
+button {
+  padding: 10px 18px;
+  margin: 5px;
+  border: 0;
+  border-radius: 7px;
+  background: #18b6b0;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.video {
+  width: min(100%, 1280px);
+  aspect-ratio: 16 / 9;
+  margin: 20px auto;
+  position: relative;
+  overflow: hidden;
+  background: #eff7ff;
+}
+
+.scene {
+  display: none;
+  height: 100%;
+  padding: 6%;
+  text-align: center;
+}
+
+.scene.active {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+h1 {
+  color: #062b50;
+  font-size: clamp(28px, 5vw, 64px);
+}
+
+h2 {
+  color: #0878a9;
+  font-size: clamp(20px, 3vw, 38px);
+}
+
+p, li {
+  font-size: clamp(14px, 2vw, 25px);
+  line-height: 1.5;
+}
+
+.equation {
+  padding: 18px;
+  margin: 15px auto;
+  background: #fff2bb;
+  border-radius: 12px;
+  font-size: clamp(22px, 4vw, 42px);
+  font-weight: bold;
+}
+
+.subtitle {
+  background: #062b50;
+  color: white;
+  padding: 12px;
+  margin-top: auto;
+  border-radius: 8px;
+}
+
+#timer {
+  color: white;
+  margin-top: 10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="toolbar">
+  <button onclick="startVideo()">▶ Play Video</button>
+  <button onclick="pauseVideo()">Ⅱ Pause</button>
+  <button onclick="restartVideo()">↺ Restart</button>
+  <div id="timer">00:00 / 03:00</div>
+</div>
+
+<main class="video">
+
+  <section class="scene active">
+    <h1>AC BRIDGE</h1>
+    <h2>Sources, Detectors &amp; Bridge Balance</h2>
+    <p>Electrical Measurements Engineering</p>
+    <div class="subtitle">
+      Hello everyone! Today we will learn about AC bridges,
+      their sources, detectors and balance equation.
+    </div>
+  </section>
+
+  <section class="scene">
+    <h1>What is an AC Bridge?</h1>
+    <ul>
+      <li>A four-arm electrical network.</li>
+      <li>Measures unknown impedance.</li>
+      <li>Used for resistance, inductance and capacitance.</li>
+    </ul>
+    <div class="subtitle">
+      An AC bridge compares known and unknown impedances.
+    </div>
+  </section>
+
+  <section class="scene">
+    <h1>AC Sources</h1>
+    <h2>Function Generator / Oscillator</h2>
+    <p>Provides alternating voltage at a suitable frequency.</p>
+    <div class="equation">v(t) = Vₘ sin(ωt)</div>
+    <div class="subtitle">
+      A stable AC source is important for accurate measurement.
+    </div>
+  </section>
+
+  <section class="scene">
+    <h1>AC Bridge Detectors</h1>
+    <ul>
+      <li>Vibration galvanometer</li>
+      <li>Sensitive voltmeter</li>
+      <li>Electronic null detector</li>
+    </ul>
+    <div class="subtitle">
+      The detector indicates when the bridge approaches balance.
+    </div>
+  </section>
+
+  <section class="scene">
+    <h1>Types of AC Bridges</h1>
+    <h2>Maxwell Bridge</h2>
+    <p>Used for inductance measurement.</p>
+    <h2>Wien Bridge</h2>
+    <p>Used in frequency measurement and oscillator circuits.</p>
+    <div class="subtitle">
+      Different bridges are selected for different applications.
+    </div>
+  </section>
+
+  <section class="scene">
+    <h1>General Balance Equation</h1>
+    <p>At balance, the ratios of opposite-arm impedances are equal.</p>
+    <div class="equation">
+      Z₁ / Z₂ = Z₃ / Z₄
+    </div>
+    <div class="equation">
+      Z₁Z₄ = Z₂Z₃
+    </div>
+    <div class="subtitle">
+      Both magnitude and phase conditions must be satisfied.
+    </div>
+  </section>
+
+  <section class="scene">
+    <h1>Unknown Impedance</h1>
+    <p>Suppose Z₄ is unknown.</p>
+    <div class="equation">
+      Zₓ = (Z₂ × Z₃) / Z₁
+    </div>
+    <p>Use the known impedances to calculate the unknown value.</p>
+    <div class="subtitle">
+      The bridge balance equation helps determine unknown impedance.
+    </div>
+  </section>
+
+  <section class="scene">
+    <h1>Thank You!</h1>
+    <h2>Key Takeaways</h2>
+    <p>Source → Detector → Balance Equation</p>
+    <div class="equation">Z₁ / Z₂ = Z₃ / Z₄</div>
+    <div class="subtitle">
+      Thank you for watching this AC Bridge lesson.
+    </div>
+  </section>
+
+</main>
+
+<script>
+const scenes = document.querySelectorAll(".scene");
+let sceneIndex = 0;
+let playing = false;
+let sceneStart = 0;
+let elapsed = 0;
+let timer = null;
+
+const durations = [15, 20, 30, 20, 20, 35, 30, 10];
+const totalDuration = 180;
+
+function showScene(index) {
+  scenes.forEach((scene, i) => {
+    scene.classList.toggle("active", i === index);
+  });
+  sceneIndex = index;
+}
+
+function updateTimer() {
+  const seconds = Math.min(
+    totalDuration,
+    elapsed + (playing ? (Date.now() - sceneStart) / 1000 : 0)
+  );
+
+  const m = Math.floor(seconds / 60);
+  const s = Math.floor(seconds % 60);
+
+  document.getElementById("timer").textContent =
+    String(m).padStart(2, "0") + ":" +
+    String(s).padStart(2, "0") + " / 03:00";
+
+  if (seconds >= totalDuration) {
+    pauseVideo();
+    elapsed = totalDuration;
+  }
+}
+
+function tick() {
+  if (!playing) return;
+
+  const currentTime =
+    elapsed + (Date.now() - sceneStart) / 1000;
+
+  let cumulative = 0;
+
+  for (let i = 0; i < durations.length; i++) {
+    cumulative += durations[i];
+
+    if (currentTime < cumulative) {
+      showScene(i);
+      break;
+    }
+  }
+
+  updateTimer();
+  timer = requestAnimationFrame(tick);
+}
+
+function startVideo() {
+  if (playing) return;
+
+  if (elapsed >= totalDuration) {
+    elapsed = 0;
+    showScene(0);
+  }
+
+  playing = true;
+  sceneStart = Date.now();
+  tick();
+}
+
+function pauseVideo() {
+  if (!playing) return;
+
+  elapsed += (Date.now() - sceneStart) / 1000;
+  playing = false;
+
+  if (timer) cancelAnimationFrame(timer);
+
+  updateTimer();
+}
+
+function restartVideo() {
+  pauseVideo();
+  elapsed = 0;
+  sceneStart = 0;
+  showScene(0);
+  updateTimer();
+}
+
+updateTimer();
+</script>
+
+</body>
+</html>
