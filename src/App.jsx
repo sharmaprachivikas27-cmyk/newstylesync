@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter } from 'react-router-dom';
+import { HashRouter } from 'react-router-dom';
 import { ThemeProvider } from './context/ThemeContext';
 import { ToastProvider } from './context/ToastContext';
 import { AuthProvider } from './context/AuthContext';
@@ -20,9 +20,9 @@ export default function App() {
         <AuthProvider>
           <CartProvider>
             <WishlistProvider>
-              <BrowserRouter>
+              <HashRouter>
                 <AppRoutes />
-              </BrowserRouter>
+              </HashRouter>
             </WishlistProvider>
           </CartProvider>
         </AuthProvider>
